@@ -31,7 +31,7 @@ public class BadRequestException extends AppException {
     private static final String INVALID_ID = "Invalid id value";
     private static final String TEXT_TOO_LONG = "Text is too long";
     private static final String RESERVATION_CANCELLED = "Reservation has already been cancelled, can not be modified";
-    private static final String INVALID_RANGE = "Invalid range. Arrival con no be after departure";
+    private static final String INVALID_RANGE = "Invalid range. Start date can not be after end date";
     private static final String RANGE_NOT_ALLOWED_TOO_LOW = "Range not allowed. It does not reach minimum stay days";
     private static final String RANGE_NOT_ALLOWED_TOO_HIGH = "Range not allowed. It surpass maximum stay days";
     private static final String MALFORMED_BODY = "Unable to parse body content";
@@ -70,10 +70,10 @@ public class BadRequestException extends AppException {
         return new BadRequestException(ErrorCode.BR_MODIFYING_CANCELLED, meta, RESERVATION_CANCELLED);
     }
 
-    public static BadRequestException byInvalidRange(@NonNull LocalDate arrival, @NonNull LocalDate departure) {
+    public static BadRequestException byInvalidRange(@NonNull String startParam, @NonNull LocalDate start, @NonNull String endParam, @NonNull LocalDate end) {
         Map<String, Object> meta = new LinkedHashMap<>();
-        meta.put(ARRIVAL_KEY, arrival);
-        meta.put(DEPARTURE_KEY, departure);
+        meta.put(startParam, start);
+        meta.put(endParam, end);
         return new BadRequestException(ErrorCode.BR_INVALID_RANGE, meta, INVALID_RANGE);
     }
 

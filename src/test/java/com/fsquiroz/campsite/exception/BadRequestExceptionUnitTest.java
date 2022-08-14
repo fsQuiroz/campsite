@@ -80,23 +80,25 @@ public class BadRequestExceptionUnitTest {
 
     @Test
     public void givenInvalidRangeWhenNewBadRequestThenValidException() {
+        String startParam = "arrival";
+        String endParam = "departure";
         LocalDate arrival = LocalDate.parse("2022-08-22");
         LocalDate departure = LocalDate.parse("2022-08-20");
 
-        AppException exception = BadRequestException.byInvalidRange(arrival, departure);
+        AppException exception = BadRequestException.byInvalidRange(startParam, arrival, endParam, departure);
 
         assertThat(exception)
                 .isNotNull()
-                .hasMessage("Invalid range. Arrival con no be after departure")
+                .hasMessage("Invalid range. Start date can not be after end date")
                 .hasFieldOrPropertyWithValue("code", ErrorCode.BR_INVALID_RANGE);
 
         assertThat(exception.getMeta())
-                .extracting("arrival")
+                .extracting(startParam)
                 .asInstanceOf(InstanceOfAssertFactories.LOCAL_DATE)
                 .isEqualTo(LocalDate.parse("2022-08-22"));
 
         assertThat(exception.getMeta())
-                .extracting("departure")
+                .extracting(endParam)
                 .asInstanceOf(InstanceOfAssertFactories.LOCAL_DATE)
                 .isEqualTo(LocalDate.parse("2022-08-20"));
     }
