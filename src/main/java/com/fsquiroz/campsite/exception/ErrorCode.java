@@ -11,6 +11,7 @@ public enum ErrorCode {
     BR_INVALID_RANGE,
     BR_RANGE_NOT_ALLOWED_TOO_LOW,
     BR_RANGE_NOT_ALLOWED_TOO_HIGH,
+    BR_ARRIVAL_TOO_EARLY,
     NF_BY_ID,
     ISE
 }

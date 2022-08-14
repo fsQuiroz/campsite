@@ -214,6 +214,29 @@ public class BadRequestExceptionUnitTest {
                 .hasCauseInstanceOf(MethodArgumentTypeMismatchException.class);
     }
 
+    @Test
+    public void givenArrivalTooEarlyWhenNewBadRequestThenValidException() {
+        LocalDate arrival = LocalDate.parse("2022-08-10");
+        LocalDate minArrival = LocalDate.parse("2022-08-11");
+
+        AppException exception = BadRequestException.byArrivalTooEarly(arrival, minArrival);
+
+        assertThat(exception)
+                .isNotNull()
+                .hasMessage("Arrival is too early")
+                .hasFieldOrPropertyWithValue("code", ErrorCode.BR_ARRIVAL_TOO_EARLY);
+
+        assertThat(exception.getMeta())
+                .extracting("arrival")
+                .asInstanceOf(InstanceOfAssertFactories.LOCAL_DATE)
+                .isEqualTo(LocalDate.parse("2022-08-10"));
+
+        assertThat(exception.getMeta())
+                .extracting("minArrival")
+                .asInstanceOf(InstanceOfAssertFactories.LOCAL_DATE)
+                .isEqualTo(LocalDate.parse("2022-08-11"));
+    }
+
     private HttpMessageNotReadableException givenMalformedBody() {
         return Mockito.mock(HttpMessageNotReadableException.class);
     }

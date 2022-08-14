@@ -23,6 +23,7 @@ public class BadRequestException extends AppException {
     private static final String MAX_TEXT_LENGTH_KEY = "maxTextLength";
     private static final String CANCELLATION_DATE_KEY = "cancellationDate";
     private static final String ARRIVAL_KEY = "arrival";
+    private static final String MIN_ARRIVAL_KEY = "minArrival";
     private static final String DEPARTURE_KEY = "departure";
     private static final String MIN_STAY_KEY = "minStay";
     private static final String MAX_STAY_KEY = "maxStay";
@@ -36,6 +37,7 @@ public class BadRequestException extends AppException {
     private static final String RANGE_NOT_ALLOWED_TOO_HIGH = "Range not allowed. It surpass maximum stay days";
     private static final String MALFORMED_BODY = "Unable to parse body content";
     private static final String MALFORMED_PARAM = "Unable to parse param";
+    private static final String ARRIVAL_TOO_EARLY = "Arrival is too early";
 
     private BadRequestException(ErrorCode code, Map<String, Object> meta, String message) {
         this(code, meta, message, null);
@@ -93,6 +95,13 @@ public class BadRequestException extends AppException {
         meta.put(MIN_STAY_KEY, minStay);
         meta.put(MAX_STAY_KEY, maxStay);
         return new BadRequestException(ErrorCode.BR_RANGE_NOT_ALLOWED_TOO_HIGH, meta, RANGE_NOT_ALLOWED_TOO_HIGH);
+    }
+
+    public static BadRequestException byArrivalTooEarly(@NonNull LocalDate arrival, @NonNull LocalDate minArrival) {
+        Map<String, Object> meta = new LinkedHashMap<>();
+        meta.put(ARRIVAL_KEY, arrival);
+        meta.put(MIN_ARRIVAL_KEY, minArrival);
+        return new BadRequestException(ErrorCode.BR_ARRIVAL_TOO_EARLY, meta, ARRIVAL_TOO_EARLY);
     }
 
     public static BadRequestException byMalformedParam(MethodArgumentTypeMismatchException e) {
