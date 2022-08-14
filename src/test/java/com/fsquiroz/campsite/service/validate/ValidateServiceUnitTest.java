@@ -1,5 +1,6 @@
 package com.fsquiroz.campsite.service.validate;
 
+import com.fsquiroz.campsite.TestUtils;
 import com.fsquiroz.campsite.exception.BadRequestException;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,7 +18,7 @@ public class ValidateServiceUnitTest {
 
         ValidateServiceImpl validateService = new ValidateServiceImpl();
 
-        Exception exception = catchException(() -> validateService.isValidId(id));
+        Exception exception = TestUtils.catchException(() -> validateService.isValidId(id));
 
         assertThat(exception)
                 .isNull();
@@ -29,7 +30,7 @@ public class ValidateServiceUnitTest {
 
         ValidateServiceImpl validateService = new ValidateServiceImpl();
 
-        Exception exception = catchException(() -> validateService.isValidId(id));
+        Exception exception = TestUtils.catchException(() -> validateService.isValidId(id));
 
         assertThat(exception)
                 .isInstanceOf(BadRequestException.class)
@@ -43,7 +44,7 @@ public class ValidateServiceUnitTest {
 
         ValidateServiceImpl validateService = new ValidateServiceImpl();
 
-        Exception exception = catchException(() -> validateService.isNotNull(param, value));
+        Exception exception = TestUtils.catchException(() -> validateService.isNotNull(param, value));
 
         assertThat(exception)
                 .isNull();
@@ -56,7 +57,7 @@ public class ValidateServiceUnitTest {
 
         ValidateServiceImpl validateService = new ValidateServiceImpl();
 
-        Exception exception = catchException(() -> validateService.isNotNull(param, value));
+        Exception exception = TestUtils.catchException(() -> validateService.isNotNull(param, value));
 
         assertThat(exception)
                 .isInstanceOf(BadRequestException.class)
@@ -70,7 +71,7 @@ public class ValidateServiceUnitTest {
 
         ValidateServiceImpl validateService = new ValidateServiceImpl();
 
-        Exception exception = catchException(() -> validateService.isNotEmpty(param, text));
+        Exception exception = TestUtils.catchException(() -> validateService.isNotEmpty(param, text));
 
         assertThat(exception)
                 .isInstanceOf(BadRequestException.class)
@@ -84,7 +85,7 @@ public class ValidateServiceUnitTest {
 
         ValidateServiceImpl validateService = new ValidateServiceImpl();
 
-        Exception exception = catchException(() -> validateService.isNotEmpty(param, text));
+        Exception exception = TestUtils.catchException(() -> validateService.isNotEmpty(param, text));
 
         assertThat(exception)
                 .isInstanceOf(BadRequestException.class)
@@ -98,7 +99,7 @@ public class ValidateServiceUnitTest {
 
         ValidateServiceImpl validateService = new ValidateServiceImpl();
 
-        Exception exception = catchException(() -> validateService.isNotEmpty(param, text));
+        Exception exception = TestUtils.catchException(() -> validateService.isNotEmpty(param, text));
 
         assertThat(exception)
                 .isInstanceOf(BadRequestException.class)
@@ -112,7 +113,7 @@ public class ValidateServiceUnitTest {
 
         ValidateServiceImpl validateService = new ValidateServiceImpl();
 
-        Exception exception = catchException(() -> validateService.isNotEmpty(param, text));
+        Exception exception = TestUtils.catchException(() -> validateService.isNotEmpty(param, text));
 
         assertThat(exception)
                 .isNull();
@@ -126,7 +127,7 @@ public class ValidateServiceUnitTest {
 
         ValidateServiceImpl validateService = new ValidateServiceImpl();
 
-        Exception exception = catchException(() -> validateService.isNotEmptyWithinSize(param, maxSize, text));
+        Exception exception = TestUtils.catchException(() -> validateService.isNotEmptyWithinSize(param, maxSize, text));
 
         assertThat(exception)
                 .isNull();
@@ -140,7 +141,7 @@ public class ValidateServiceUnitTest {
 
         ValidateServiceImpl validateService = new ValidateServiceImpl();
 
-        Exception exception = catchException(() -> validateService.isNotEmptyWithinSize(param, maxSize, text));
+        Exception exception = TestUtils.catchException(() -> validateService.isNotEmptyWithinSize(param, maxSize, text));
 
         assertThat(exception)
                 .isInstanceOf(BadRequestException.class)
@@ -156,7 +157,7 @@ public class ValidateServiceUnitTest {
 
         ValidateServiceImpl validateService = new ValidateServiceImpl();
 
-        Exception exception = catchException(() -> validateService.isValidRange(startParam, start, endParam, end));
+        Exception exception = TestUtils.catchException(() -> validateService.isValidRange(startParam, start, endParam, end));
 
         assertThat(exception)
                 .isNull();
@@ -171,7 +172,7 @@ public class ValidateServiceUnitTest {
 
         ValidateServiceImpl validateService = new ValidateServiceImpl();
 
-        Exception exception = catchException(() -> validateService.isValidRange(startParam, start, endParam, end));
+        Exception exception = TestUtils.catchException(() -> validateService.isValidRange(startParam, start, endParam, end));
 
         assertThat(exception)
                 .isNull();
@@ -186,19 +187,10 @@ public class ValidateServiceUnitTest {
 
         ValidateServiceImpl validateService = new ValidateServiceImpl();
 
-        Exception exception = catchException(() -> validateService.isValidRange(startParam, start, endParam, end));
+        Exception exception = TestUtils.catchException(() -> validateService.isValidRange(startParam, start, endParam, end));
 
         assertThat(exception)
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage("Invalid range. Start date can not be after end date");
-    }
-
-    private Exception catchException(Runnable r) {
-        try {
-            r.run();
-        } catch (Exception e) {
-            return e;
-        }
-        return null;
     }
 }
