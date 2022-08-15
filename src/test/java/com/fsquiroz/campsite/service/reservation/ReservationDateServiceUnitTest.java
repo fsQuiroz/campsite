@@ -84,9 +84,7 @@ public class ReservationDateServiceUnitTest {
 
         assertThat(validRangeToReserve.end())
                 .isEqualTo(
-                        LocalDate.now()
-                                .plus(MAX_AHEAD_ARRIVAL_DAYS, ChronoUnit.DAYS)
-                                .plus(MAX_STAY_DAYS - 1, ChronoUnit.DAYS)
+                        LocalDate.now().plus(MAX_AHEAD_ARRIVAL_DAYS, ChronoUnit.DAYS)
                 );
     }
 

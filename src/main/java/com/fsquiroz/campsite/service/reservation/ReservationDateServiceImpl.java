@@ -33,9 +33,7 @@ public class ReservationDateServiceImpl implements ReservationDateService {
     @Override
     public Range<LocalDate> getValidRangeToReserve() {
         LocalDate start = LocalDate.now().plus(reservationParams.minAheadArrivalReservationDays(), ChronoUnit.DAYS);
-        LocalDate end = LocalDate.now()
-                .plus(reservationParams.maxAheadArrivalReservationDays(), ChronoUnit.DAYS)
-                .plus(reservationParams.maxStayDays() - 1, ChronoUnit.DAYS);
+        LocalDate end = LocalDate.now().plus(reservationParams.maxAheadArrivalReservationDays(), ChronoUnit.DAYS);
         return new Range<>(start, end);
     }
 
