@@ -1,0 +1,3 @@
+#! /bin/bash
+
+docker-compose -f src/main/resources/docker/docker-compose.yml -p campsite up

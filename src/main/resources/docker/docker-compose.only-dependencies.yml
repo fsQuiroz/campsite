@@ -1,19 +1,9 @@
 version: '3'
 
 services:
-  backend:
-    image: campsite-backend
-    container_name: campsite-backend
-    ports:
-      - 8080:8080
-    volumes:
-      - ./docker.properties:/app/src/main/resources/application.properties
-    depends_on:
-      - mysql
-      - redis
   mysql:
     image: mysql:8.0
-    container_name: mysql-campsite
+    container_name: mysql-campsite-only-dependencies
     environment:
       - MYSQL_DATABASE=campsite
       - MYSQL_ROOT_PASSWORD=Root2022
@@ -26,6 +16,6 @@ services:
       - ./mysql/data.sql:/docker-entrypoint-initdb.d/02-data.sql
   redis:
     image: redis
-    container_name: redis-campsite
+    container_name: redis-campsite-only-dependencies
     ports:
       - 9736:6379
