@@ -1,6 +1,5 @@
 package com.fsquiroz.campsite.configuration;
 
-import com.fsquiroz.campsite.api.ErrorResponse;
 import com.fsquiroz.campsite.exception.AppException;
 import com.fsquiroz.campsite.exception.BadRequestException;
 import com.fsquiroz.campsite.exception.ServerException;
@@ -35,32 +34,32 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         if (log.isDebugEnabled()) {
             log.debug(ae.getMessage(), ae);
         }
-        return parseException(request, ae);
+        return parseException(ae);
     }
 
     @Override
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException e, HttpHeaders headers, HttpStatus status, WebRequest request) {
         log.warn(e.getMessage(), e);
-        return parseException(request, BadRequestException.byMalformedBody(e));
+        return parseException(BadRequestException.byMalformedBody(e));
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<Object> typeMismatchException(WebRequest request, MethodArgumentTypeMismatchException e) {
         log.warn(e.getMessage(), e);
-        return parseException(request, BadRequestException.byMalformedParam(e));
+        return parseException(BadRequestException.byMalformedParam(e));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> genericException(WebRequest request, Exception e) {
         log.error(e.getMessage(), e);
-        return parseException(request, new ServerException(ISE_MESSAGE, e));
+        return parseException(new ServerException(ISE_MESSAGE, e));
     }
 
-    private ResponseEntity<Object> parseException(WebRequest request, AppException ae) {
+    private ResponseEntity<Object> parseException(AppException ae) {
         ResponseStatus responseStatus = AnnotatedElementUtils.findMergedAnnotation(ae.getClass(), ResponseStatus.class);
         HttpStatus status = responseStatus != null ? responseStatus.value() : HttpStatus.INTERNAL_SERVER_ERROR;
         return new ResponseEntity<>(
-                mapper.map(ae, status, request),
+                mapper.map(ae, status),
                 status
         );
     }

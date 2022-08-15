@@ -23,8 +23,6 @@ public class ErrorResponse {
 
     private String message;
 
-    private String path;
-
     private Map<String, Object> meta;
 
     private ErrorCode code;
