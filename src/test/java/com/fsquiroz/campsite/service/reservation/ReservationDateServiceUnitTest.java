@@ -21,6 +21,8 @@ public class ReservationDateServiceUnitTest {
     private static final int MAX_DEFAULT_DAYS_TO_SEARCH = 31;
     private static final int MIN_AHEAD_ARRIVAL_DAYS = 1;
     private static final int MAX_AHEAD_ARRIVAL_DAYS = 31;
+    private static final int MAX_NAME_SIZE = 20;
+    private static final int MAX_EMAIL_SIZE = 20;
 
     @Test
     public void givenDefaultParamsWhenGetDefaultRangeThenStartTodayPlusMinAheadArrivalDays() {
@@ -173,7 +175,7 @@ public class ReservationDateServiceUnitTest {
     }
 
     private ReservationParams givenDefaultParams() {
-        return new ReservationParams(MIN_STAY_DAYS, MAX_STAY_DAYS, MAX_DEFAULT_DAYS_TO_SEARCH, MIN_AHEAD_ARRIVAL_DAYS, MAX_AHEAD_ARRIVAL_DAYS);
+        return new ReservationParams(MIN_STAY_DAYS, MAX_STAY_DAYS, MAX_DEFAULT_DAYS_TO_SEARCH, MIN_AHEAD_ARRIVAL_DAYS, MAX_AHEAD_ARRIVAL_DAYS, MAX_NAME_SIZE, MAX_EMAIL_SIZE);
     }
 
     private ValidateService givenDefaultValidateService() {

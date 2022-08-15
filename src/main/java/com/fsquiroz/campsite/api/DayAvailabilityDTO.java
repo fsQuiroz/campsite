@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class DayAvailabilityDTO {
 
-    private boolean available;
+    private boolean validForArrival;
+    private boolean validForDeparture;
 }

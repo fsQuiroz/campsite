@@ -14,8 +14,10 @@ public class ParamsConfig {
             @Value("${reservation.params.maxStayDays:3}") int maxStayDays,
             @Value("${reservation.params.maxDefaultDaysToSearch:31}") int maxDefaultDaysToSearch,
             @Value("${reservation.params.minAheadArrivalReservationDays:1}") int minAheadArrivalReservationDays,
-            @Value("${reservation.params.maxAheadArrivalReservationDays:31}") int maxAheadArrivalReservationDays
+            @Value("${reservation.params.maxAheadArrivalReservationDays:31}") int maxAheadArrivalReservationDays,
+            @Value("${reservation.params.maxNameSize:255}") int maxNameSize,
+            @Value("${reservation.params.maxEmailSize:255}") int maxEmailSize
     ) {
-        return new ReservationParams(minStayDays, maxStayDays, maxDefaultDaysToSearch, minAheadArrivalReservationDays, maxAheadArrivalReservationDays);
+        return new ReservationParams(minStayDays, maxStayDays, maxDefaultDaysToSearch, minAheadArrivalReservationDays, maxAheadArrivalReservationDays, maxNameSize, maxEmailSize);
     }
 }

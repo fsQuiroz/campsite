@@ -8,7 +8,6 @@ import com.fsquiroz.campsite.persistence.entity.Reservation;
 import com.fsquiroz.campsite.persistence.repositroy.ReservationRepository;
 import com.fsquiroz.campsite.service.validate.ValidateService;
 import com.fsquiroz.campsite.util.Range;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -27,10 +26,10 @@ public class ReservationServiceImpl implements ReservationService {
     private static final String NAME_PARAM = "name";
     private static final String EMAIL_PARAM = "email";
     private static final String FROM_PARAM = "from";
-    private static final String TO_PARAM = "tp";
+    private static final String TO_PARAM = "to";
 
-    private final int maxNameSize;
-    private final int maxEmailSize;
+    private final ReservationParams reservationParams;
+
     private final ValidateService validateService;
 
     private final ReservationDateService reservationDateService;
@@ -38,14 +37,12 @@ public class ReservationServiceImpl implements ReservationService {
     private final ReservationRepository reservationRepository;
 
     public ReservationServiceImpl(
-            @Value("${reservation.service.maxNameSize:255}") int maxNameSize,
-            @Value("${reservation.service.maxEmailSize:255}") int maxEmailSize,
+            ReservationParams reservationParams,
             ValidateService validateService,
             ReservationDateService reservationDateService,
             ReservationRepository reservationRepository
     ) {
-        this.maxNameSize = maxNameSize;
-        this.maxEmailSize = maxEmailSize;
+        this.reservationParams = reservationParams;
         this.validateService = validateService;
         this.reservationDateService = reservationDateService;
         this.reservationRepository = reservationRepository;
@@ -63,9 +60,14 @@ public class ReservationServiceImpl implements ReservationService {
         Range<LocalDate> availableRange = reservationDateService.getValidRangeToReserve();
         Map<LocalDate, DayAvailabilityDTO> days = new LinkedHashMap<>();
         for (LocalDate toEval = rangeToSearch.start(); toEval.isBefore(rangeToSearch.end()) || toEval.isEqual(rangeToSearch.end()); toEval = toEval.plus(1, ChronoUnit.DAYS)) {
-            boolean available = (toEval.isAfter(availableRange.start()) || toEval.isEqual(availableRange.start())) &&
+            boolean validForArrival = (toEval.isAfter(availableRange.start()) || toEval.isEqual(availableRange.start())) &&
                     (toEval.isBefore(availableRange.end()) || toEval.isEqual(availableRange.end()));
-            DayAvailabilityDTO dad = DayAvailabilityDTO.builder().available(available).build();
+            boolean validForDeparture = !toEval.isEqual(availableRange.start()) &&
+                    (validForArrival || (toEval.isAfter(availableRange.end()) && ChronoUnit.DAYS.between(availableRange.end(), toEval) < reservationParams.maxStayDays()));
+            DayAvailabilityDTO dad = DayAvailabilityDTO.builder()
+                    .validForArrival(validForArrival)
+                    .validForDeparture(validForDeparture)
+                    .build();
             days.put(toEval, dad);
         }
         return days;
@@ -81,8 +83,8 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public Reservation create(ReservationDTO toCreate) {
         validateService.isNotNull(BODY_PARAM, toCreate);
-        validateService.isNotEmptyWithinSize(NAME_PARAM, maxNameSize, toCreate.getName());
-        validateService.isNotEmptyWithinSize(EMAIL_PARAM, maxEmailSize, toCreate.getEmail());
+        validateService.isNotEmptyWithinSize(NAME_PARAM, reservationParams.maxNameSize(), toCreate.getName());
+        validateService.isNotEmptyWithinSize(EMAIL_PARAM, reservationParams.maxEmailSize(), toCreate.getEmail());
         validateReservationDates(toCreate);
         Reservation r = new Reservation();
         r.setCreated(Instant.now());

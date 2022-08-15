@@ -16,9 +16,9 @@ public class DayAvailabilityMapperUnitTest {
     @Test
     public void giveAvailabilityWhenMapThenMapped() {
         Map<LocalDate, DayAvailabilityDTO> availability = new LinkedHashMap<>();
-        availability.put(LocalDate.parse("2022-08-01"), DayAvailabilityDTO.builder().available(false).build());
-        availability.put(LocalDate.parse("2022-08-02"), DayAvailabilityDTO.builder().available(true).build());
-        availability.put(LocalDate.parse("2022-08-03"), DayAvailabilityDTO.builder().available(false).build());
+        availability.put(LocalDate.parse("2022-08-01"), DayAvailabilityDTO.builder().validForArrival(false).validForDeparture(false).build());
+        availability.put(LocalDate.parse("2022-08-02"), DayAvailabilityDTO.builder().validForArrival(true).validForDeparture(true).build());
+        availability.put(LocalDate.parse("2022-08-03"), DayAvailabilityDTO.builder().validForArrival(false).validForDeparture(true).build());
 
         DayAvailabilityMapper mapper = new DayAvailabilityMapper();
 
@@ -29,10 +29,13 @@ public class DayAvailabilityMapperUnitTest {
                 .hasSize(3);
 
         assertThat(mapped.get("2022-08-01"))
-                .hasFieldOrPropertyWithValue("available", false);
+                .hasFieldOrPropertyWithValue("validForArrival", false)
+                .hasFieldOrPropertyWithValue("validForDeparture", false);
         assertThat(mapped.get("2022-08-02"))
-                .hasFieldOrPropertyWithValue("available", true);
+                .hasFieldOrPropertyWithValue("validForArrival", true)
+                .hasFieldOrPropertyWithValue("validForDeparture", true);
         assertThat(mapped.get("2022-08-03"))
-                .hasFieldOrPropertyWithValue("available", false);
+                .hasFieldOrPropertyWithValue("validForArrival", false)
+                .hasFieldOrPropertyWithValue("validForDeparture", true);
     }
 }
