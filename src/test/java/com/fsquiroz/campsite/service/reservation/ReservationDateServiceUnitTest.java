@@ -157,6 +157,23 @@ public class ReservationDateServiceUnitTest {
                 .hasMessage("Arrival is too early");
     }
 
+    @Test
+    public void givenDefaultParamsAndArrivalAfterValidEndDateWhenStayRangeIsValidThenThrowsNoMoreReservationsAvailable() {
+        Range<LocalDate> stayRange = new Range<>(LocalDate.parse("2022-09-20"), LocalDate.parse("2022-09-21"));
+        Range<LocalDate> validRange = new Range<>(LocalDate.parse("2022-08-01"), LocalDate.parse("2022-08-31"));
+
+        ReservationParams params = givenDefaultParams();
+        ValidateService validateService = givenDefaultValidateService();
+
+        ReservationDateServiceImpl service = new ReservationDateServiceImpl(params, validateService);
+
+        Exception exception = TestUtils.catchException(() -> service.stayRangeIsValid(stayRange, validRange));
+
+        assertThat(exception)
+                .isInstanceOf(BadRequestException.class)
+                .hasMessage("There is no more reservations available for the provided date range");
+    }
+
     private ReservationParams givenDefaultParams() {
         return new ReservationParams(MIN_STAY_DAYS, MAX_STAY_DAYS, MAX_DEFAULT_DAYS_TO_SEARCH, MIN_AHEAD_ARRIVAL_DAYS, MAX_AHEAD_ARRIVAL_DAYS);
     }

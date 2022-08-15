@@ -49,6 +49,8 @@ public class ReservationDateServiceImpl implements ReservationDateService {
             throw BadRequestException.byRangeNotAllowedTooLow(stayRange.start(), stayRange.end(), reservationParams.minStayDays(), reservationParams.maxStayDays());
         } else if (stayRange.start().isBefore(validRange.start())) {
             throw BadRequestException.byArrivalTooEarly(stayRange.start(), validRange.start());
+        } else if (stayRange.start().isAfter(validRange.end())) {
+            throw BadRequestException.byNoMoreReservationAvailable(stayRange.start(), stayRange.end());
         }
     }
 }

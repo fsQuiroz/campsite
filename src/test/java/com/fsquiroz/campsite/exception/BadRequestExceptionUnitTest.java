@@ -237,6 +237,29 @@ public class BadRequestExceptionUnitTest {
                 .isEqualTo(LocalDate.parse("2022-08-11"));
     }
 
+    @Test
+    public void givenNoMoreReservationAvailableWhenNewBadRequestThenValidException() {
+        LocalDate arrival = LocalDate.parse("2022-08-10");
+        LocalDate departure = LocalDate.parse("2022-08-12");
+
+        AppException exception = BadRequestException.byNoMoreReservationAvailable(arrival, departure);
+
+        assertThat(exception)
+                .isNotNull()
+                .hasMessage("There is no more reservations available for the provided date range")
+                .hasFieldOrPropertyWithValue("code", ErrorCode.BR_NO_MORE_RESERVATION_AVAILABLE);
+
+        assertThat(exception.getMeta())
+                .extracting("arrival")
+                .asInstanceOf(InstanceOfAssertFactories.LOCAL_DATE)
+                .isEqualTo(LocalDate.parse("2022-08-10"));
+
+        assertThat(exception.getMeta())
+                .extracting("departure")
+                .asInstanceOf(InstanceOfAssertFactories.LOCAL_DATE)
+                .isEqualTo(LocalDate.parse("2022-08-12"));
+    }
+
     private HttpMessageNotReadableException givenMalformedBody() {
         return Mockito.mock(HttpMessageNotReadableException.class);
     }

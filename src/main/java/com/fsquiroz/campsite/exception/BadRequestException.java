@@ -38,6 +38,7 @@ public class BadRequestException extends AppException {
     private static final String MALFORMED_BODY = "Unable to parse body content";
     private static final String MALFORMED_PARAM = "Unable to parse param";
     private static final String ARRIVAL_TOO_EARLY = "Arrival is too early";
+    private static final String NO_MORE_RESERVATION_AVAILABLE = "There is no more reservations available for the provided date range";
 
     private BadRequestException(ErrorCode code, Map<String, Object> meta, String message) {
         this(code, meta, message, null);
@@ -102,6 +103,13 @@ public class BadRequestException extends AppException {
         meta.put(ARRIVAL_KEY, arrival);
         meta.put(MIN_ARRIVAL_KEY, minArrival);
         return new BadRequestException(ErrorCode.BR_ARRIVAL_TOO_EARLY, meta, ARRIVAL_TOO_EARLY);
+    }
+
+    public static BadRequestException byNoMoreReservationAvailable(@NonNull LocalDate arrival, @NonNull LocalDate departure) {
+        Map<String, Object> meta = new LinkedHashMap<>();
+        meta.put(ARRIVAL_KEY, arrival);
+        meta.put(DEPARTURE_KEY, departure);
+        return new BadRequestException(ErrorCode.BR_NO_MORE_RESERVATION_AVAILABLE, meta, NO_MORE_RESERVATION_AVAILABLE);
     }
 
     public static BadRequestException byMalformedParam(MethodArgumentTypeMismatchException e) {
