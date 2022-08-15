@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-campsite
+    environment:
+      - MYSQL_DATABASE=campsite
+      - MYSQL_ROOT_PASSWORD=Root2022
+      - MYSQL_USER=campsite
+      - MYSQL_PASSWORD=Campsite2022
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./mysql/data.sql:/docker-entrypoint-initdb.d/02-data.sql
