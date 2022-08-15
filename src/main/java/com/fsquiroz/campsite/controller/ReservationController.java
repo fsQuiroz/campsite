@@ -1,4 +1,4 @@
-package com.fsquiroz.campsite;
+package com.fsquiroz.campsite.controller;
 
 import com.fsquiroz.campsite.api.DayAvailabilityDTO;
 import com.fsquiroz.campsite.api.GenericResponseDTO;
