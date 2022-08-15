@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -27,6 +28,7 @@ public class BadRequestException extends AppException {
     private static final String DEPARTURE_KEY = "departure";
     private static final String MIN_STAY_KEY = "minStay";
     private static final String MAX_STAY_KEY = "maxStay";
+    private static final String ACTUAL_STAY_KEY = "actualStay";
 
     private static final String MISSING_PARAM_MSG = "Missing param";
     private static final String INVALID_ID = "Invalid id value";
@@ -86,6 +88,7 @@ public class BadRequestException extends AppException {
         meta.put(DEPARTURE_KEY, departure);
         meta.put(MIN_STAY_KEY, minStay);
         meta.put(MAX_STAY_KEY, maxStay);
+        meta.put(ACTUAL_STAY_KEY, ChronoUnit.DAYS.between(arrival, departure));
         return new BadRequestException(ErrorCode.BR_RANGE_NOT_ALLOWED_TOO_LOW, meta, RANGE_NOT_ALLOWED_TOO_LOW);
     }
 
@@ -95,6 +98,7 @@ public class BadRequestException extends AppException {
         meta.put(DEPARTURE_KEY, departure);
         meta.put(MIN_STAY_KEY, minStay);
         meta.put(MAX_STAY_KEY, maxStay);
+        meta.put(ACTUAL_STAY_KEY, ChronoUnit.DAYS.between(arrival, departure));
         return new BadRequestException(ErrorCode.BR_RANGE_NOT_ALLOWED_TOO_HIGH, meta, RANGE_NOT_ALLOWED_TOO_HIGH);
     }
 

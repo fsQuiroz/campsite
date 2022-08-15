@@ -117,7 +117,8 @@ public class BadRequestExceptionUnitTest {
                 .hasMessage("Range not allowed. It does not reach minimum stay days")
                 .hasFieldOrPropertyWithValue("code", ErrorCode.BR_RANGE_NOT_ALLOWED_TOO_LOW)
                 .hasFieldOrPropertyWithValue("meta.minStay", minStay)
-                .hasFieldOrPropertyWithValue("meta.maxStay", maxStay);
+                .hasFieldOrPropertyWithValue("meta.maxStay", maxStay)
+                .hasFieldOrPropertyWithValue("meta.actualStay", 0L);
 
         assertThat(exception.getMeta())
                 .extracting("arrival")
@@ -144,7 +145,8 @@ public class BadRequestExceptionUnitTest {
                 .hasMessage("Range not allowed. It surpass maximum stay days")
                 .hasFieldOrPropertyWithValue("code", ErrorCode.BR_RANGE_NOT_ALLOWED_TOO_HIGH)
                 .hasFieldOrPropertyWithValue("meta.minStay", minStay)
-                .hasFieldOrPropertyWithValue("meta.maxStay", maxStay);
+                .hasFieldOrPropertyWithValue("meta.maxStay", maxStay)
+                .hasFieldOrPropertyWithValue("meta.actualStay", 10L);
 
         assertThat(exception.getMeta())
                 .extracting("arrival")
