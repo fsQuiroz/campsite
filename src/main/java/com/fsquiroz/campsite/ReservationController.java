@@ -3,9 +3,9 @@ package com.fsquiroz.campsite;
 import com.fsquiroz.campsite.api.DayAvailabilityDTO;
 import com.fsquiroz.campsite.api.GenericResponseDTO;
 import com.fsquiroz.campsite.api.ReservationDTO;
-import com.fsquiroz.campsite.mapper.DayAvailabilityMapper;
 import com.fsquiroz.campsite.mapper.ReservationMapper;
 import com.fsquiroz.campsite.persistence.entity.Reservation;
+import com.fsquiroz.campsite.service.reservation.DayAvailabilityProxy;
 import com.fsquiroz.campsite.service.reservation.ReservationService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -26,16 +26,16 @@ public class ReservationController {
 
     private final ReservationMapper reservationMapper;
 
-    private final DayAvailabilityMapper dayAvailabilityMapper;
+    private final DayAvailabilityProxy dayAvailabilityProxy;
 
     public ReservationController(
             ReservationService reservationService,
             ReservationMapper reservationMapper,
-            DayAvailabilityMapper dayAvailabilityMapper
+            DayAvailabilityProxy dayAvailabilityProxy
     ) {
         this.reservationService = reservationService;
         this.reservationMapper = reservationMapper;
-        this.dayAvailabilityMapper = dayAvailabilityMapper;
+        this.dayAvailabilityProxy = dayAvailabilityProxy;
     }
 
     @GetMapping("/availability")
@@ -43,9 +43,8 @@ public class ReservationController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to
     ) {
-        Map<LocalDate, DayAvailabilityDTO> availabilityDTOMap = reservationService.getAvailableDays(from, to);
         return ResponseEntity.ok(
-                dayAvailabilityMapper.map(availabilityDTOMap)
+                dayAvailabilityProxy.getAvailableDays(from, to)
         );
     }
 

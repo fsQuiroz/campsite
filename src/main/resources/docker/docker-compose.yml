@@ -14,3 +14,8 @@ services:
     volumes:
       - ./mysql/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
       - ./mysql/data.sql:/docker-entrypoint-initdb.d/02-data.sql
+  redis:
+    image: redis
+    container_name: redis-campsite
+    ports:
+      - 9736:6379
