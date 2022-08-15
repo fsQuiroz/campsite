@@ -7,6 +7,7 @@ import com.fsquiroz.campsite.mapper.DayAvailabilityMapper;
 import com.fsquiroz.campsite.mapper.ReservationMapper;
 import com.fsquiroz.campsite.persistence.entity.Reservation;
 import com.fsquiroz.campsite.service.reservation.ReservationService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,8 +40,8 @@ public class ReservationController {
 
     @GetMapping("/availability")
     public ResponseEntity<Map<String, DayAvailabilityDTO>> getAvailability(
-            @RequestParam(required = false) LocalDate from,
-            @RequestParam(required = false) LocalDate to
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to
     ) {
         Map<LocalDate, DayAvailabilityDTO> availabilityDTOMap = reservationService.getAvailableDays(from, to);
         return ResponseEntity.ok(
