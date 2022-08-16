@@ -1,4 +1,4 @@
-# Campfire
+# Campsite
 
 ## Introduction
 Microservice intended to handle reservations
