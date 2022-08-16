@@ -1,7 +1,6 @@
 package com.fsquiroz.campsite.integration;
 
 import com.fsquiroz.campsite.service.reservation.ReservationParams;
-import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,6 @@ import java.time.temporal.ChronoUnit;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@Slf4j
 public class GetAvailabilityIntegrationTest {
 
     @Autowired

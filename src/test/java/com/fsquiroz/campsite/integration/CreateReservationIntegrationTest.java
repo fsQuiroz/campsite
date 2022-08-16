@@ -1,7 +1,6 @@
 package com.fsquiroz.campsite.integration;
 
 import com.fsquiroz.campsite.service.reservation.ReservationParams;
-import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
@@ -21,7 +19,6 @@ import java.time.temporal.ChronoUnit;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@Slf4j
 public class CreateReservationIntegrationTest {
 
     @Autowired
@@ -55,7 +52,6 @@ public class CreateReservationIntegrationTest {
         String body = givenReservation(arrival, departure);
 
         mockMvc.perform(post(body))
-                .andDo(MockMvcResultHandlers.log())
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id", Matchers.notNullValue()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.created", Matchers.notNullValue()))
@@ -68,7 +64,7 @@ public class CreateReservationIntegrationTest {
     }
 
     @Test
-    public void givenReservationWithFlippedArrivalAndDepartureWhenCreateThenCreated() throws Exception {
+    public void givenReservationWithFlippedArrivalAndDepartureWhenCreateThenBadRequest() throws Exception {
         LocalDate arrival = LocalDate.now().plus(reservationParams.maxAheadArrivalReservationDays(), ChronoUnit.DAYS);
         LocalDate departure = arrival.plus(reservationParams.maxStayDays(), ChronoUnit.DAYS);
         String body = givenReservation(departure, arrival);
